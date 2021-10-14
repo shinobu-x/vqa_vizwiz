@@ -1,0 +1,58 @@
+logs:
+    dir: ./results/train
+
+annotations:
+    dir: ./data/annotations
+    top_ans: 3000
+    max_length: 26
+    min_count_word: 0
+    path_vocabs: ./data/preprocessed/vocabs.json
+
+images:
+    type: test
+    dir:
+        test: ./data/images/test
+        trainval: ./data/images/trainval
+    arch: ResNet152
+    mode: attention
+    img_size: 448
+    batch_size: 4
+    workers: 4
+    data:
+        file: resnet14x14.h5
+        type: test
+        dir:
+            test: ./data/preprocessed/test
+            trainval: ./data/preprocessed/trainval
+
+model:
+    pretrained: # ./results/train/2021-10-02_06:39:06-final.pth
+    seq2vec:
+        dropout: 0.25
+        emb_size: 300
+    pooling:
+        dim_v: 2048
+        dim_q: 1024
+        dim_h: 1024
+        dropout_v: 0.5
+        dropout_q: 0.5
+    classifier:
+        dropout: 0.5
+    attention:
+        glimpses: 2
+        mid_features: 512
+        dropout: 0.5
+
+training:
+    split: train
+    lr: 0.001
+    batch_size: 128
+    epochs: 10000
+    data_workers: 4
+    results: ./results/train
+
+prediction:
+    dir: ./results/train
+    model: 2021-10-04_06:17:09-best_accuracy.pth
+    split: test
+    results: ./results/test/prediction.json
